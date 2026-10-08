@@ -1,8 +1,6 @@
 package io.github.hazsbk.loomlimit;
 
-import org.slf4j.Logger;
-
-import com.mojang.logging.LogUtils;
+import net.neoforged.fml.config.ModConfig;
 
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
@@ -13,11 +11,15 @@ import net.neoforged.fml.ModContainer;
 public class LoomLimit {
     // Define mod id in a common place for everything to reference
     public static final String MODID = "loomlimit";
-    // Directly reference a slf4j logger
-    public static final Logger LOGGER = LogUtils.getLogger();
 
     // The constructor for the mod class is the first code that is run when your mod is loaded.
     // FML will recognize some parameter types like IEventBus or ModContainer and pass them in automatically.
     public LoomLimit(IEventBus modEventBus, ModContainer modContainer) {
+        modContainer.registerConfig(ModConfig.Type.SERVER, Config.SPEC);
+    }
+
+    public static int maxPatterns() {
+        // Reading a config value before it loads throws, so fall back to the default.
+        return Config.SPEC.isLoaded() ? Config.MAX_PATTERNS.get() : Config.MAX_PATTERNS.getDefault();
     }
 }

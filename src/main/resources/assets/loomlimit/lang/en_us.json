@@ -1,0 +1,5 @@
+{
+  "loomlimit.configuration.title": "Loom Limit Configuration",
+  "loomlimit.configuration.max_patterns": "Max banner patterns",
+  "loomlimit.configuration.max_patterns.tooltip": "Maximum number of pattern layers a banner can have (vanilla is 6)."
+}
