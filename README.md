@@ -1,25 +1,40 @@
+# Loom Limit
 
-Installation information
-=======
+Raises the banner pattern limit on the loom. Vanilla caps banners at 6 pattern layers. With Loom Limit you can go up to 64 (default: 16).
 
-This template repository can be directly cloned to get you started with a new
-mod. Simply create a new repository cloned from this one, by following the
-instructions provided by [GitHub](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template).
+## Features
 
-Once you have your clone, simply open the repository in the IDE of your choice. The usual recommendation for an IDE is either IntelliJ IDEA or Eclipse.
+- Configurable maximum number of pattern layers per banner (6 to 64)
+- Works in the loom GUI: the pattern picker and result preview stay available past 6 layers
+- In-game config screen (Mods → Loom Limit → Config)
 
-If at any point you are missing libraries in your IDE, or you've run into problems you can
-run `gradlew --refresh-dependencies` to refresh the local cache. `gradlew clean` to reset everything 
-{this does not affect your code} and then start the process again.
+## Requirements
 
-Mapping Names:
-============
-By default, the MDK is configured to use the official mapping names from Mojang for methods and fields 
-in the Minecraft codebase. These names are covered by a specific license. All modders should be aware of this
-license. For the latest license text, refer to the mapping file itself, or the reference copy here:
-https://github.com/NeoForged/NeoForm/blob/main/Mojang.md
+- Minecraft [1.21.x]
+- NeoForge [version]
+- **Install on both client and server.** The server decides what the loom can produce, and the client decides what the loom screen shows. A client without the mod is still capped at 6 in the UI.
 
-Additional Resources: 
-==========
-Community Documentation: https://docs.neoforged.net/  
-NeoForged Discord: https://discord.neoforged.net/
+## Configuration
+
+The config file is `config/loomlimit-server.toml`. It's a server config, so its value is synced to clients when they join a world or server.
+
+| Option         | Default | Range | Description                                  |
+| -------------- | ------- | ----- | -------------------------------------------- |
+| `max_patterns` | 16      | 6-64  | Maximum pattern layers a banner can have     |
+
+## Known limitations
+
+- Banners with many layers cost more to render, on the ground, in item frames, in your hand, and on shields. Keep the limit reasonable on low-end machines or busy servers.
+- If you lower `max_patterns` after making banners above the new limit, those banners are still valid items, but you can't add more layers to them.
+
+## Building
+
+```
+./gradlew build
+```
+
+The jar is written to `build/libs/`.
+
+## License
+
+MIT License. See [LICENSE](LICENSE.txt).

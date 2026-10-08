@@ -29,6 +29,8 @@ displayName="${mod_name}" #mandatory
 # The authors of the mod, displayed in the mod UI (optional)
 authors="haz-sbk"
 
+logoFile="icon.png"
+
 # The description text for the mod (multi line!) (#mandatory)
 description='''
 Allows up to 64 banner layers, default is 16.
