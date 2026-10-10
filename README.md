@@ -1,32 +1,86 @@
-# MultiLoader Template
+# Loom Limit
 
-This project provides a Gradle project template that can compile Minecraft mods for multiple modloaders using a common project for the sources. This project does not require any third party libraries or dependencies. If you have any questions or want to discuss the project, please join our [Discord](https://discord.myceliummod.network).
+Raises the banner pattern limit on the loom. Vanilla caps banners at 6 pattern layers. With Loom Limit you can go up to 64 (default: 16), and choose how many layers your client actually draws.
 
-## Getting Started
+<!-- Add a screenshot of a banner with many layers in the loom here, e.g. ![Loom with 20+ layers](docs/loom.png) -->
 
-### IntelliJ IDEA
-This guide will show how to import the MultiLoader Template into IntelliJ IDEA. The setup process is roughly equivalent to setting up the modloaders independently and should be very familiar to anyone who has worked with their MDKs.
+## Features
 
-1. Clone or download this repository to your computer.
-2. Configure the project by setting the properties in the `gradle.properties` file. You will also need to change the `rootProject.name`  property in `settings.gradle`, this should match the folder name of your project, or else IDEA may complain.
-3. Open the template's root folder as a new project in IDEA. This is the folder that contains this README.md file and the gradlew executable.
-4. If your default JVM/JDK is not Java 21 you will encounter an error when opening the project. This error is fixed by going to `File > Settings > Build, Execution, Deployment > Build Tools > Gradle > Gradle JVM` and changing the value to a valid Java 21 JVM. You will also need to set the Project SDK to Java 21. This can be done by going to `File > Project Structure > Project SDK`. Once both have been set open the Gradle tab in IDEA and click the refresh button to reload the project.
-5. Open your Run/Debug Configurations. Under the `Application` category there should now be options to run Fabric and NeoForge projects. Select one of the client options and try to run it.
-6. Assuming you were able to run the game in step 5 your workspace should now be set up.
+- **Configurable layer limit** from 6 to 64 (default 16), enforced by the loom on the server side
+- **Loom screen follows the limit**: the pattern picker and result preview stay available past 6 layers
+- **Client render option**: draw every layer up to 64, follow the server's limit, or set your own cap. Handy if lots of layers hurt your FPS.
+- **In-game config screen**
 
-### Eclipse
-While it is possible to use this template in Eclipse it is not recommended. During the development of this template multiple critical bugs and quirks related to Eclipse were found at nearly every level of the required build tools. While we continue to work with these tools to report and resolve issues support for projects like these are not there yet. For now Eclipse is considered unsupported by this project. The development cycle for build tools is notoriously slow so there are no ETAs available.
+## Supported versions
 
-## Development Guide
-When using this template the majority of your mod should be developed in the `common` project. The `common` project is compiled against the vanilla game and is used to hold code that is shared between the different loader-specific versions of your mod. The `common` project has no knowledge or access to ModLoader specific code, apis, or concepts. Code that requires something from a specific loader must be done through the project that is specific to that loader, such as the `fabric` or `neoforge` projects.
+| Loader   | Minecraft |
+| -------- | --------- |
+| NeoForge | 1.21.1    |
+| Fabric   | ~~1.21.1~~  soon implemented  |
 
-Loader specific projects such as the `fabric` and `neoforge` project are used to load the `common` project into the game. These projects also define code that is specific to that loader. Loader specific projects can access all the code in the `common` project. It is important to remember that the `common` project can not access code from loader specific projects.
+Fabric needs [Fabric API](https://modrinth.com/mod/fabric-api).
 
-## Removing Platforms and Loaders
-While this template has support for many modloaders, new loaders may appear in the future, and existing loaders may become less relevant.
+## Installation
 
-Removing loader specific projects is as easy as deleting the folder, and removing the `include("projectname")` line from the `settings.gradle` file.
-For example if you wanted to remove support for `forge` you would follow the following steps:
+1. Download the jar for your loader from [Modrinth](#) / [CurseForge](#) / the [Releases](../../releases) page.
+2. Put it in your `mods` folder.
 
-1. Delete the subproject folder. For example, delete `MultiLoader-Template/forge`.
-2. Remove the project from `settings.gradle`. For example, remove `include("forge")`. 
+**Install on both the client and the server.** The server decides what the loom can produce, and the client decides what the loom screen shows. A client without the mod is still capped at 6 layers in the UI.
+
+## Configuration
+
+### Server config: `config/loomlimit-server.toml`
+
+Synced from the server to connected clients. You can override it per world with `saves/<world>/serverconfig/loomlimit-server.toml` (on a dedicated server: `<server folder>/world/serverconfig/`).
+
+| Option         | Default | Range | Description                                  |
+| -------------- | ------- | ----- | -------------------------------------------- |
+| `max_patterns` | 16      | 6-64  | Maximum pattern layers a banner can have     |
+
+Banners that already have more layers than the current limit keep them, but you can't add more.
+
+### Client config: `config/loomlimit-client.toml`
+
+Local to each player. It only affects how many layers are **drawn**, not what the loom allows.
+
+| Option                | Default | Range | Description                                                  |
+| --------------------- | ------- | ----- | ------------------------------------------------------------ |
+| `render_mode`         | `MAX`   | -     | `MAX` draws every layer up to 64, `LIMIT` follows the server's `max_patterns`, `CUSTOM` uses `custom_render_limit` |
+| `custom_render_limit` | 32      | 6-64  | Only used when `render_mode` is `CUSTOM`                     |
+
+## Building
+
+Requires Java 21.
+
+```
+./gradlew build
+```
+
+The jars are written to:
+
+```
+neoforge/build/libs/loomlimit-neoforge-<minecraft version>-<mod version>.jar
+fabric/build/libs/loomlimit-fabric-<minecraft version>-<mod version>.jar
+```
+
+Upload the jar without a `-sources` or `-javadoc` suffix.
+
+### Project layout
+
+The project is based on the [MultiLoader Template](https://github.com/jaredlll08/MultiLoader-Template).
+
+```
+common/     Mixins and loader-independent code (vanilla only)
+neoforge/   NeoForge entry point and metadata
+fabric/     Fabric entry point and metadata
+```
+
+The mixins in `common` ask for the limits through a small service interface (`ILoomConfig`), and each loader provides its own implementation.
+
+## Contributing
+
+Bug reports and pull requests are welcome. Please include your Minecraft version, loader version and the log (`logs/latest.log`) when reporting a problem.
+
+## License
+
+[MIT](LICENSE) © haz-sbk
