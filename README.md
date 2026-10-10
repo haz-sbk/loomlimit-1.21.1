@@ -22,7 +22,7 @@ Fabric needs [Fabric API](https://modrinth.com/mod/fabric-api).
 
 ## Installation
 
-1. Download the jar for your loader from [Modrinth](#) / the [Releases](../../releases) page.
+1. Download the jar for your loader from [Modrinth](https://modrinth.com/mod/loom-limit) / the [Releases](../../releases) page.
 2. Put it in your `mods` folder.
 
 **Install on both the client and the server.** The server decides what the loom can produce, and the client decides what the loom screen shows. A client without the mod is still capped at 6 layers in the UI.
