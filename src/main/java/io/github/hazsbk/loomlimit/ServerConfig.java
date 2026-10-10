@@ -2,7 +2,7 @@ package io.github.hazsbk.loomlimit;
 
 import net.neoforged.neoforge.common.ModConfigSpec;
 
-public class Config {
+public class ServerConfig {
     private static final ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder();
 
     public static final ModConfigSpec.IntValue MAX_PATTERNS = BUILDER
@@ -12,5 +12,5 @@ public class Config {
 
     public static final ModConfigSpec SPEC = BUILDER.build();
 
-    private Config() {}
+    private ServerConfig() {}
 }

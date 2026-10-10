@@ -3,7 +3,7 @@
   "package": "io.github.hazsbk.loomlimit.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": ["LoomMenuMixin"],
-  "client": ["LoomScreenMixin"],
+  "client": ["LoomScreenMixin", "BannerRendererMixin"],
   "injectors": {
     "defaultRequire": 1
   },
