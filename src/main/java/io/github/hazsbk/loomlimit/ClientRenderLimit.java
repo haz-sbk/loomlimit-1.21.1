@@ -12,8 +12,8 @@ public final class ClientRenderLimit {
         }
 
         return switch (ClientConfig.CONFIG.renderMode.get()) {
-            case LIMIT -> LoomLimit.maxPatterns();
             case MAX -> HARD_MAX;
+            case LIMIT -> LoomLimit.maxPatterns();
             case CUSTOM -> ClientConfig.CONFIG.customRenderLimit.get();
         };
     }
